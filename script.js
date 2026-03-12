@@ -22,15 +22,29 @@ function getTodayInUTCMinus5() {
 const CALENDAR_START_DATE = '2026-03-12';
 const CALENDAR_END_DATE = '2026-03-31';
 
-// Utility to add days to a YYYY-MM-DD string (treated in UTC)
+// Utility to add days to a YYYY-MM-DD string using pure calendar math
+// so it stays consistent with the America/Bogota (UTC-5) calendar.
 function addDaysToDateString(dateStr, days) {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  const d = new Date(Date.UTC(year, month - 1, day));
-  d.setUTCDate(d.getUTCDate() + days);
+  let [year, month, day] = dateStr.split('-').map(Number);
 
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(d.getUTCDate()).padStart(2, '0');
+  // Simple loop is fine here because data-day counts are small (e.g. <= 31)
+  while (days > 0) {
+    const daysInMonth = new Date(year, month, 0).getDate(); // only used for month length
+    day += 1;
+    if (day > daysInMonth) {
+      day = 1;
+      month += 1;
+      if (month > 12) {
+        month = 1;
+        year += 1;
+      }
+    }
+    days -= 1;
+  }
+
+  const y = year;
+  const m = String(month).padStart(2, '0');
+  const dd = String(day).padStart(2, '0');
 
   return `${y}-${m}-${dd}`;
 }
@@ -40,20 +54,53 @@ function isDateWithinRange(dateStr, startStr, endStr) {
   return dateStr >= startStr && dateStr <= endStr;
 }
 
+// Convert a YYYY-MM-DD (Colombia date) into a timestamp representing
+// midnight in America/Bogota, expressed in UTC milliseconds.
+// America/Bogota is fixed at UTC-5 with no DST, so 00:00 at that date
+// corresponds to 05:00 UTC.
+function getBogotaMidnightTimestamp(dateStr) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return Date.UTC(year, month - 1, day, 5, 0, 0);
+}
+
+function formatCountdown(msRemaining) {
+  if (msRemaining <= 0) {
+    return '00 - 00 - 00 - 00';
+  }
+
+  let totalSeconds = Math.floor(msRemaining / 1000);
+  const days = Math.floor(totalSeconds / (24 * 60 * 60));
+  totalSeconds -= days * 24 * 60 * 60;
+  const hours = Math.floor(totalSeconds / (60 * 60));
+  totalSeconds -= hours * 60 * 60;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds - minutes * 60;
+
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(days)} - ${pad(hours)} - ${pad(minutes)} - ${pad(seconds)}`;
+}
+
 const todayUTCMinus5 = getTodayInUTCMinus5();
 
 // For each card:
 // - Compute its date as CALENDAR_START_DATE + (data-day - 1) days
 // - Set data-date to that computed value
-// - Enable the button only if:
-//   * the card's date is within [CALENDAR_START_DATE, CALENDAR_END_DATE], and
-//   * the card's date is equal to today's date in UTC-5
+// - Button label states:
+//   * If the date is today (within range): label "Open"
+//   * If the date is in the past or out of range: label "Closed"
+//   * If the date is in the future (within range): show countdown "DD - HH - MM - SS"
 document.querySelectorAll('.calendar-card').forEach((card) => {
   const dayAttr = card.getAttribute('data-day');
   const dayNumber = parseInt(dayAttr, 10);
   const btn = card.querySelector('.open-btn');
 
   if (!btn || Number.isNaN(dayNumber)) return;
+
+  // Clear any existing countdown interval attached to this button
+  if (btn._countdownInterval) {
+    clearInterval(btn._countdownInterval);
+    btn._countdownInterval = null;
+  }
 
   const offsetDays = dayNumber - 1;
   const cardDate = addDaysToDateString(CALENDAR_START_DATE, offsetDays);
@@ -62,16 +109,51 @@ document.querySelectorAll('.calendar-card').forEach((card) => {
   const withinRange = isDateWithinRange(
     cardDate,
     CALENDAR_START_DATE,
-    CALENDAR_END_DATE
+    CALENDAR_END_DATE,
   );
-  const isToday = cardDate === todayUTCMinus5;
 
-  if (withinRange && isToday) {
-    btn.disabled = false;
-    btn.classList.remove('disabled');
-  } else {
+  const isToday = cardDate === todayUTCMinus5;
+  const isPast = cardDate < todayUTCMinus5;
+  const isFuture = cardDate > todayUTCMinus5;
+
+  if (!withinRange || isPast) {
+    // Past or outside the configured window
     btn.disabled = true;
     btn.classList.add('disabled');
+    btn.textContent = 'Closed';
+  } else if (isToday) {
+    // Active day (today)
+    btn.disabled = false;
+    btn.classList.remove('disabled');
+    btn.textContent = 'Open';
+  } else if (isFuture) {
+    // Future day within range: show live countdown and keep disabled
+    btn.disabled = true;
+    btn.classList.add('disabled');
+
+    const targetTs = getBogotaMidnightTimestamp(cardDate);
+
+    const updateCountdown = () => {
+      const nowTs = Date.now();
+      const diff = targetTs - nowTs;
+
+      if (diff <= 0) {
+        // Countdown reached: stop timer; on next page load
+        // the "today" logic will take over. For this session,
+        // treat it as open.
+        clearInterval(btn._countdownInterval);
+        btn._countdownInterval = null;
+        btn.disabled = false;
+        btn.classList.remove('disabled');
+        btn.textContent = 'Open';
+        return;
+      }
+
+      btn.textContent = formatCountdown(diff);
+    };
+
+    updateCountdown();
+    btn._countdownInterval = setInterval(updateCountdown, 1000);
   }
 });
 
