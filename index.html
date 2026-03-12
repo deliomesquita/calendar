@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Calendar with Cards</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="calendar-container">
+    <!-- 10 Calendar Cards -->
+    <div class="calendar-card" data-day="1" data-date="2026-03-12">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,1" alt="Day 1" />
+        <span class="header-title">Day 1</span>
+      </div>
+      <div class="card-text">
+        This is some information for Day 1. Explore the activity and details for this day.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-1">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="2" data-date="2026-03-13">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,2" alt="Day 2" />
+        <span class="header-title">Day 2</span>
+      </div>
+      <div class="card-text">
+        Details and agenda for Day 2. Discover more about this day's highlights.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-2">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="3" data-date="2026-03-14">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,3" alt="Day 3" />
+        <span class="header-title">Day 3</span>
+      </div>
+      <div class="card-text">
+        Find out what's scheduled for Day 3. Don't miss out on planned events!
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-3">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="4" data-date="2026-03-15">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,4" alt="Day 4" />
+        <span class="header-title">Day 4</span>
+      </div>
+      <div class="card-text">
+        Events, plans, and news for Day 4. Click for more information.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-4">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="5" data-date="2026-03-16">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,5" alt="Day 5" />
+        <span class="header-title">Day 5</span>
+      </div>
+      <div class="card-text">
+        Stay up to date with Day 5's planned sessions and activities.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-5">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="6" data-date="2026-03-17">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,6" alt="Day 6" />
+        <span class="header-title">Day 6</span>
+      </div>
+      <div class="card-text">
+        Information and events for Day 6. Check the details and join in!
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-6">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="7" data-date="2026-03-18">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,7" alt="Day 7" />
+        <span class="header-title">Day 7</span>
+      </div>
+      <div class="card-text">
+        Explore the events of Day 7 and what is planned for this day.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-7">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="8" data-date="2026-03-19">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,8" alt="Day 8" />
+        <span class="header-title">Day 8</span>
+      </div>
+      <div class="card-text">
+        Day 8 brings more activities and opportunities. Check what's available.
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-8">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="9" data-date="2026-03-20">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,9" alt="Day 9" />
+        <span class="header-title">Day 9</span>
+      </div>
+      <div class="card-text">
+        Get insights about Day 9. Unlock events and activities here!
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-9">Open</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" data-day="10" data-date="2026-03-21">
+      <div class="card-header">
+        <img class="header-img" src="https://source.unsplash.com/48x48/?nature,10" alt="Day 10" />
+        <span class="header-title">Day 10</span>
+      </div>
+      <div class="card-text">
+        End your journey with Day 10's activities. Find out what's in store!
+      </div>
+      <div class="card-footer">
+        <button class="open-btn" data-modal="modal-10">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUPS for all days -->
+  <div class="modal" id="modal-1">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-1">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,1" alt="Day 1 promotion" />
+      <h2 class="modal-title">Day 1 Promotion</h2>
+      <p class="modal-text">Unlock a special Day 1 offer and start your journey with a great bonus.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin1">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-2">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-2">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,2" alt="Day 2 promotion" />
+      <h2 class="modal-title">Day 2 Promotion</h2>
+      <p class="modal-text">Continue the excitement with Day 2 rewards tailored just for you.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin2">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-3">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-3">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,3" alt="Day 3 promotion" />
+      <h2 class="modal-title">Day 3 Promotion</h2>
+      <p class="modal-text">Day 3 brings extra surprises and chances to win more.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin3">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-4">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-4">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,4" alt="Day 4 promotion" />
+      <h2 class="modal-title">Day 4 Promotion</h2>
+      <p class="modal-text">Keep the momentum with Day 4 bonuses made to boost your play.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin4">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-5">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-5">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,5" alt="Day 5 promotion" />
+      <h2 class="modal-title">Day 5 Promotion</h2>
+      <p class="modal-text">Halfway there! Claim your Day 5 promotion and stay in the game.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin5">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-6">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-6">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,6" alt="Day 6 promotion" />
+      <h2 class="modal-title">Day 6 Promotion</h2>
+      <p class="modal-text">Day 6 gives you another chance to opt in for extra rewards.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin6">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-7">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-7">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,7" alt="Day 7 promotion" />
+      <h2 class="modal-title">Day 7 Promotion</h2>
+      <p class="modal-text">Celebrate Day 7 with a tailored promotion to keep things exciting.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin7">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-8">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-8">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,8" alt="Day 8 promotion" />
+      <h2 class="modal-title">Day 8 Promotion</h2>
+      <p class="modal-text">Day 8 comes with even more opportunities to make the most of your play.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin8">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-9">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-9">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,9" alt="Day 9 promotion" />
+      <h2 class="modal-title">Day 9 Promotion</h2>
+      <p class="modal-text">As the journey nears its end, Day 9 offers extra-value rewards.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin9">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-10">
+    <div class="modal-content">
+      <button class="close-btn" data-close="modal-10">&times;</button>
+      <img class="modal-img" src="https://source.unsplash.com/400x200/?promo,10" alt="Day 10 promotion" />
+      <h2 class="modal-title">Day 10 Promotion</h2>
+      <p class="modal-text">Finish strong with a final Day 10 promotion designed to reward your journey.</p>
+      <button class="optin-btn"
+              data-tag-name="TESTDELIO"
+              data-tag-value="optin10">
+        Opt in
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
