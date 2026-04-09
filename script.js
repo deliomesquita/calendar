@@ -19,8 +19,8 @@ function getTodayInUTCMinus5() {
 
 // ---- CONFIGURABLE CALENDAR WINDOW (UTC-5, YYYY-MM-DD) ----
 // Change these two constants to adjust when the calendar is active.
-const CALENDAR_START_DATE = '2026-03-12';
-const CALENDAR_END_DATE = '2026-03-31';
+const CALENDAR_START_DATE = '2026-04-08';
+const CALENDAR_END_DATE = '2026-04-15';
 
 // Utility to add days to a YYYY-MM-DD string using pure calendar math
 // so it stays consistent with the America/Bogota (UTC-5) calendar.
@@ -82,6 +82,14 @@ function formatCountdown(msRemaining) {
 
 const todayUTCMinus5 = getTodayInUTCMinus5();
 
+function applyCardOpenState(card, isOpen) {
+  if (isOpen) {
+    card.classList.add('is-open');
+  } else {
+    card.classList.remove('is-open');
+  }
+}
+
 // For each card:
 // - Compute its date as CALENDAR_START_DATE + (data-day - 1) days
 // - Set data-date to that computed value
@@ -118,16 +126,19 @@ document.querySelectorAll('.calendar-card').forEach((card) => {
 
   if (!withinRange || isPast) {
     // Past or outside the configured window
+    applyCardOpenState(card, false);
     btn.disabled = true;
     btn.classList.add('disabled');
     btn.textContent = 'Closed';
   } else if (isToday) {
     // Active day (today)
+    applyCardOpenState(card, true);
     btn.disabled = false;
     btn.classList.remove('disabled');
     btn.textContent = 'Open';
   } else if (isFuture) {
     // Future day within range: show live countdown and keep disabled
+    applyCardOpenState(card, false);
     btn.disabled = true;
     btn.classList.add('disabled');
 
@@ -143,6 +154,7 @@ document.querySelectorAll('.calendar-card').forEach((card) => {
         // treat it as open.
         clearInterval(btn._countdownInterval);
         btn._countdownInterval = null;
+        applyCardOpenState(card, true);
         btn.disabled = false;
         btn.classList.remove('disabled');
         btn.textContent = 'Open';

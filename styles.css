@@ -16,6 +16,7 @@ body {
 }
 
 .calendar-card {
+  --card-bg: #fff;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.04);
@@ -27,6 +28,59 @@ body {
   align-items: flex-start;
   overflow: hidden;
   position: relative;
+}
+
+.calendar-card.is-open {
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.calendar-card.is-open > * {
+  position: relative;
+  z-index: 2;
+}
+
+.calendar-card.is-open::before {
+  content: "";
+  position: absolute;
+  inset: -140%;
+  background-image: conic-gradient(from 0deg,
+      rgba(0, 0, 0, 0) 0deg,
+      rgba(0, 0, 0, 0) 24deg,
+      #8950bd 24deg,
+      #8950bd 56deg,
+      rgba(0, 0, 0, 0) 56deg,
+      rgba(0, 0, 0, 0) 180deg,
+      rgba(0, 0, 0, 0) 204deg,
+      #274690  204deg,
+      #274690  236deg,
+      rgba(0, 0, 0, 0) 236deg,
+      rgba(0, 0, 0, 0) 360deg);
+  animation: rotBGimg 3s linear infinite;
+  transition: all 0.2s linear;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.calendar-card.is-open::after {
+  content: "";
+  position: absolute;
+  background: var(--card-bg);
+  inset: 3px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes rotBGimg {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .card-header {
