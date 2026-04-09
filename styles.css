@@ -120,6 +120,8 @@ body {
 .card-footer {
   padding: 8px 16px 16px 16px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .open-btn {
@@ -132,16 +134,56 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: background 0.18s;
+  display: block;
+  margin: 0 auto;
 }
 
 .open-btn:hover {
   background: #17305e;
 }
 
+.countdown {
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+
+.countdown-value {
+  color: #274690;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.countdown-label {
+  margin-top: 8px;
+  color: #555;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.countdown-sep {
+  color: #274690;
+  font-size: 1.35rem;
+  line-height: 1;
+  margin-top: -2px;
+}
+
 /* Responsive behavior */
 @media (max-width: 900px) {
   .calendar-card {
-    max-width: 44vw;
+    max-width: 40vw;
   }
 }
 

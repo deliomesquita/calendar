@@ -63,9 +63,14 @@ function getBogotaMidnightTimestamp(dateStr) {
   return Date.UTC(year, month - 1, day, 5, 0, 0);
 }
 
-function formatCountdown(msRemaining) {
+function getCountdownParts(msRemaining) {
   if (msRemaining <= 0) {
-    return '00 - 00 - 00 - 00';
+    return {
+      days: '00',
+      hours: '00',
+      minutes: '00',
+      seconds: '00',
+    };
   }
 
   let totalSeconds = Math.floor(msRemaining / 1000);
@@ -77,7 +82,67 @@ function formatCountdown(msRemaining) {
   const seconds = totalSeconds - minutes * 60;
 
   const pad = (n) => String(n).padStart(2, '0');
-  return `${pad(days)} - ${pad(hours)} - ${pad(minutes)} - ${pad(seconds)}`;
+  return {
+    days: pad(days),
+    hours: pad(hours),
+    minutes: pad(minutes),
+    seconds: pad(seconds),
+  };
+}
+
+function ensureCountdownElement(card) {
+  const footer = card.querySelector('.card-footer');
+  if (!footer) return null;
+
+  let countdownEl = footer.querySelector('.countdown');
+  if (countdownEl) return countdownEl;
+
+  countdownEl = document.createElement('div');
+  countdownEl.className = 'countdown';
+  countdownEl.innerHTML = `
+    <div class="countdown-item">
+      <span class="countdown-value" data-unit="days">00</span>
+      <span class="countdown-label">DIAS</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-item">
+      <span class="countdown-value" data-unit="hours">00</span>
+      <span class="countdown-label">HORAS</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-item">
+      <span class="countdown-value" data-unit="minutes">00</span>
+      <span class="countdown-label">MINUTOS</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-item">
+      <span class="countdown-value" data-unit="seconds">00</span>
+      <span class="countdown-label">SEGUNDOS</span>
+    </div>
+  `;
+
+  footer.appendChild(countdownEl);
+  return countdownEl;
+}
+
+function setCountdownValues(countdownEl, parts) {
+  if (!countdownEl) return;
+  const units = ['days', 'hours', 'minutes', 'seconds'];
+  units.forEach((unit) => {
+    const valueEl = countdownEl.querySelector(`[data-unit="${unit}"]`);
+    if (valueEl) valueEl.textContent = parts[unit];
+  });
+}
+
+function showOpenButton(btn, visible) {
+  if (!btn) return;
+  btn.style.display = visible ? '' : 'none';
+}
+
+function showCountdown(card, visible) {
+  const countdownEl = ensureCountdownElement(card);
+  if (!countdownEl) return;
+  countdownEl.style.display = visible ? 'flex' : 'none';
 }
 
 const todayUTCMinus5 = getTodayInUTCMinus5();
@@ -127,22 +192,29 @@ document.querySelectorAll('.calendar-card').forEach((card) => {
   if (!withinRange || isPast) {
     // Past or outside the configured window
     applyCardOpenState(card, false);
+    showOpenButton(btn, false);
+    showCountdown(card, false);
     btn.disabled = true;
     btn.classList.add('disabled');
     btn.textContent = 'Closed';
   } else if (isToday) {
     // Active day (today)
     applyCardOpenState(card, true);
+    showOpenButton(btn, true);
+    showCountdown(card, false);
     btn.disabled = false;
     btn.classList.remove('disabled');
     btn.textContent = 'Open';
   } else if (isFuture) {
     // Future day within range: show live countdown and keep disabled
     applyCardOpenState(card, false);
+    showOpenButton(btn, false);
+    showCountdown(card, true);
     btn.disabled = true;
     btn.classList.add('disabled');
 
     const targetTs = getBogotaMidnightTimestamp(cardDate);
+    const countdownEl = ensureCountdownElement(card);
 
     const updateCountdown = () => {
       const nowTs = Date.now();
@@ -155,13 +227,15 @@ document.querySelectorAll('.calendar-card').forEach((card) => {
         clearInterval(btn._countdownInterval);
         btn._countdownInterval = null;
         applyCardOpenState(card, true);
+        showOpenButton(btn, true);
+        showCountdown(card, false);
         btn.disabled = false;
         btn.classList.remove('disabled');
         btn.textContent = 'Open';
         return;
       }
 
-      btn.textContent = formatCountdown(diff);
+      setCountdownValues(countdownEl, getCountdownParts(diff));
     };
 
     updateCountdown();
