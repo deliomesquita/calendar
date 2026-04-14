@@ -1,3 +1,6 @@
+(() => {
+'use strict';
+
 // Get "today" in UTC-5 (Colombia time) as YYYY-MM-DD
 function getTodayInUTCMinus5() {
   // Use the America/Bogota timezone (UTC-5, no DST) so the date
@@ -19,8 +22,8 @@ function getTodayInUTCMinus5() {
 
 // ---- CONFIGURABLE CALENDAR WINDOW (UTC-5, YYYY-MM-DD) ----
 // Change these two constants to adjust when the calendar is active.
-const CALENDAR_START_DATE = '2026-04-08';
-const CALENDAR_END_DATE = '2026-04-15';
+const CALENDAR_START_DATE = '2026-04-13';
+const CALENDAR_END_DATE = '2026-04-31';
 
 // Utility to add days to a YYYY-MM-DD string using pure calendar math
 // so it stays consistent with the America/Bogota (UTC-5) calendar.
@@ -335,3 +338,5 @@ async function handleOptinClick(tagName, tagValue) {
     console.error('Error in handleOptinClick:', err);
   }
 }
+
+})();
